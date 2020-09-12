@@ -1,4 +1,5 @@
 import express from 'express';
+import { personalReferee, lastEmployer } from '../../controllers/references';
 
 const router = express.Router();
 

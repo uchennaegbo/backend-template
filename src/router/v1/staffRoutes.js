@@ -1,7 +1,7 @@
 import express from 'express';
-
+import { staff } from '../../controllers/staff';
 const router = express.Router();
 
-router.get('/', (req, res) => res.send('users routes'));
+router.get('/new', staff);
 
 export default router;
