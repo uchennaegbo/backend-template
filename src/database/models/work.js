@@ -1,9 +1,9 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Experienced = sequelize.define(
-    'Experienced',
+  const Work = sequelize.define(
+    'Work',
     {
-      refId: DataTypes.INTEGER,
+      staffId: DataTypes.INTEGER,
       dateJoined: DataTypes.DATE,
       dateLeft: DataTypes.DATE,
       reasons: DataTypes.STRING,
@@ -20,17 +20,22 @@ module.exports = (sequelize, DataTypes) => {
       },
       reEmploy: DataTypes.TEXT,
       designation: DataTypes.TEXT,
+      honesty: DataTypes.TEXT,
+      recommendations: DataTypes.TEXT,
+      generalComments: DataTypes.TEXT,
+      signature: DataTypes.TEXT,
+      date: DataTypes.DATE,
     },
     {}
   );
-  Experienced.associate = function (models) {
+  Work.associate = function (models) {
     // associations can be defined here
-    const { Referee, performanceStandard } = models;
-    Experienced.belongsTo(Referee, {
-      foreign: 'refId',
+    const { Staff, performanceStandard } = models;
+    Work.belongsTo(Staff, {
+      foreign: 'staffId',
     });
 
-    Experienced.hasOne(performanceStandard);
+    Work.hasOne(performanceStandard);
   };
-  return Experienced;
+  return Work;
 };

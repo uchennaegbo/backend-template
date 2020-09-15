@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Experienceds', {
+    return queryInterface.createTable('Work', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,7 +11,7 @@ module.exports = {
       refId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Referees',
+          model: 'Staffs',
           key: 'id',
         },
       },
@@ -39,7 +39,7 @@ module.exports = {
       performanceStandardId: {
         type: Sequelize.INTEGER,
         foreignKey: {
-          model: 'perfomanceStandard',
+          model: 'perfomanceStandards',
           key: 'id',
         },
         allowNull: false,
@@ -48,6 +48,18 @@ module.exports = {
         type: Sequelize.TEXT,
       },
       designation: {
+        type: Sequelize.TEXT,
+      },
+      honesty: {
+        type: Sequelize.TEXT,
+      },
+      recommendations: {
+        type: Sequelize.TEXT,
+      },
+      generalComments: {
+        type: Sequelize.TEXT,
+      },
+      signature: {
         type: Sequelize.TEXT,
       },
       createdAt: {
@@ -61,6 +73,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Experienceds');
+    return queryInterface.dropTable('Work');
   },
 };
