@@ -1,50 +1,36 @@
 import response from '@response';
-//email service
-// db storage
+import { generateUniqueUrl } from '../../utils';
+import * as service from './service';
+import { validateRefereeEmail } from '../../shared/services/validateEmail';
+import sendMail from '../../shared/messaging/sendmail';
 
-// Handle personal referee form details
-export const personalReferee = async (req, res) => {
+
+// Handle Referee form details
+export const registerReferee = async (req, res) => {
   try {
-    const {
-      personalRefEmail,
-      lasEmployerRefName,
-      lasEmployerRefEmail,
-    } = req.body;
+    if (validateRefereeEmail(req.body.email)) {
+      return response(res, 401, 'Value must be a valid Work  email.');
+    }
 
-    const reqData = { staffId, name, email, level };
-    // validate that they are staff before storing them in the database
-    // Generate referee links using staffId
-    // Store referees details
-    // Send mails to all concerned
+    const onboarded = await service.onboard(req.body);
 
-    return response(res, 200, reqData);
+    const { id, name, email, candidateName } = onboarded;
+    // TODO: GENERATE UNIQUE URL
+    const generatedUrl = generateUniqueUrl(
+      id,
+      name.replace(/\s/g, '').toLocaleLowerCase()
+    );
+    // SEND EMAIL
+    const emailSent = await sendMail(
+      `Dear ${name}, ${candidateName} has provided you as their referee. Kindly click on the link below to fill out the reference form to further complete their application.\n ${generatedUrl}`,
+      `REFEREES FORM`,
+      email
+    );
+    // RETURN RESPOSE
+    console.log(onboarded, emailSent);
+
+    return response(res, 200, onboarded);
   } catch (error) {
-    return response(res, 500, error);
-  }
-};
-
-// Handle last employer form details
-export const lastEmployer = async (req, res) => {
-  try {
-    const {
-      staffId,
-      name,
-      email,
-      level,
-      personalRefFullName,
-      personalRefEmail,
-      lasEmployerRefName,
-      lasEmployerRefEmail,
-    } = req.body;
-
-    const reqData = { staffId, name, email, level };
-    // validate that they are staff before storing them in the database
-    // Generate referee links using staffId
-    // Store referees details
-    // Send mails to all concerned
-
-    return response(res, 200, reqData);
-  } catch (error) {
-    return response(res, 500, error);
+    return response(res, 500, error.message);
   }
 };

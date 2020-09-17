@@ -5,6 +5,14 @@ module.exports = (sequelize, DataTypes) => {
   const Work = sequelize.define(
     'Work',
     {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      firstName: DataTypes.STRING,
+      lastName: DataTypes.STRING,
+      email: DataTypes.STRING,
       candidateId: DataTypes.UUID,
       dateJoined: DataTypes.DATE,
       dateLeft: DataTypes.DATE,

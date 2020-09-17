@@ -1,11 +1,17 @@
-import { uuid as uuidv4 } from 'uuid/v4';
+// import { uuid as uuidv4 } from 'uuid/v4';
 
 ('use strict');
 module.exports = (sequelize, DataTypes) => {
   const Candidate = sequelize.define(
     'Candidate',
     {
-      name: DataTypes.STRING,
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+      },
+      firstName: DataTypes.STRING,
+      lastName: DataTypes.STRING,
       email: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -32,6 +38,6 @@ module.exports = (sequelize, DataTypes) => {
     Candidate.hasOne(Work);
   };
 
-  Candidate.beforeCreate((user) => (user.id = uuidv4()));
+  // Candidate.beforeCreate((user) => (user.id = uuidv4()));
   return Candidate;
 };

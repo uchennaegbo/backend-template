@@ -7,6 +7,11 @@ module.exports = (sequelize, DataTypes) => {
   const performanceStandard = sequelize.define(
     'performanceStandard',
     {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+      },
       jobPerformance: DataTypes.TEXT,
       conduct: DataTypes.TEXT,
       reliability: DataTypes.TEXT,
