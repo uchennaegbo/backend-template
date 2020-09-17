@@ -1,3 +1,7 @@
+import { uuid as uuidv4 } from 'uuid/v4';
+
+
+
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const performanceStandard = sequelize.define(
@@ -12,10 +16,11 @@ module.exports = (sequelize, DataTypes) => {
   );
   performanceStandard.associate = function (models) {
     // associations can be defined here
-    const { Experienced } = models;
-    performanceStandard.belongsTo(Experienced, {
-      foreign: 'performanceStandardId',
-    });
+    const { Work } = models;
+    performanceStandard.hasOne(Work);
   };
+
+  performanceStandard.beforeCreate((p) => (p.id = uuidv4()));
+
   return performanceStandard;
 };

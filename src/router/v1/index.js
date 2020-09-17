@@ -1,11 +1,11 @@
 import express from 'express';
 
 import refereeRoutes from './refereeRoutes';
-import staffRoutes from './staffRoutes';
+import candidateRoutes from './candidateRoutes';
 
 const router = express.Router();
 
 router.use('/referee', refereeRoutes);
-router.use('/staff', staffRoutes);
+router.use('/candidate', candidateRoutes);
 
 export default router;

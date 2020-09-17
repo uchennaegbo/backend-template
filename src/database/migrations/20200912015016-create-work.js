@@ -1,17 +1,18 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Work', {
+    return queryInterface.createTable('Works', {
       id: {
         allowNull: false,
-        autoIncrement: true,
+        // autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
       },
-      refId: {
-        type: Sequelize.INTEGER,
+      candidateId: {
+        type: Sequelize.UUID,
         references: {
-          model: 'Staffs',
+          model: 'Candidates',
           key: 'id',
         },
       },
@@ -37,9 +38,9 @@ module.exports = {
         type: Sequelize.STRING,
       },
       performanceStandardId: {
-        type: Sequelize.INTEGER,
-        foreignKey: {
-          model: 'perfomanceStandards',
+        type: Sequelize.UUID,
+        references: {
+          model: 'performanceStandards',
           key: 'id',
         },
         allowNull: false,
@@ -73,6 +74,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Work');
+    return queryInterface.dropTable('Works');
   },
 };

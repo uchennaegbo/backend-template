@@ -1,9 +1,11 @@
-'use strict';
+import { uuid as uuidv4 } from 'uuid/v4';
+
+('use strict');
 module.exports = (sequelize, DataTypes) => {
   const Work = sequelize.define(
     'Work',
     {
-      staffId: DataTypes.INTEGER,
+      candidateId: DataTypes.UUID,
       dateJoined: DataTypes.DATE,
       dateLeft: DataTypes.DATE,
       reasons: DataTypes.STRING,
@@ -11,13 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       finalSalary: DataTypes.INTEGER,
       otherAllowances: DataTypes.INTEGER,
       lastPositionHeld: DataTypes.STRING,
-      performanceStandardId: {
-        type: DataTypes.INTEGER,
-        foreignKey: {
-          model: 'perfomanceStandard',
-          key: 'id',
-        },
-      },
+      performanceStandardId: DataTypes.UUID,
       reEmploy: DataTypes.TEXT,
       designation: DataTypes.TEXT,
       honesty: DataTypes.TEXT,
@@ -30,12 +26,17 @@ module.exports = (sequelize, DataTypes) => {
   );
   Work.associate = function (models) {
     // associations can be defined here
-    const { Staff, performanceStandard } = models;
-    Work.belongsTo(Staff, {
-      foreign: 'staffId',
+    const { Candidate, performanceStandard } = models;
+    Work.belongsTo(Candidate, {
+      foreign: 'candidateId',
     });
 
-    Work.hasOne(performanceStandard);
+    Work.belongsTo(performanceStandard, {
+      foreign: 'performanceStandardId',
+    });
   };
+
+  Work.beforeCreate((user) => (user.id = uuidv4()));
+
   return Work;
 };

@@ -1,9 +1,13 @@
-'use strict';
+import { uuid as uuidv4 } from 'uuid/v4';
+
+
+
+('use strict');
 module.exports = (sequelize, DataTypes) => {
   const Personal = sequelize.define(
     'Personal',
     {
-      staffId: DataTypes.INTEGER,
+      candidateId: DataTypes.UUID,
       relationship: DataTypes.STRING,
       howLong: DataTypes.STRING,
       conduct: DataTypes.STRING,
@@ -21,10 +25,12 @@ module.exports = (sequelize, DataTypes) => {
   );
   Personal.associate = function (models) {
     // associations can be defined here
-    const { Referee } = models;
-    Personal.belongsTo(Staff, {
-      foreign: 'staffId',
+    const { Candidate } = models;
+    Personal.belongsTo(Candidate, {
+      foreign: 'candidateId',
     });
   };
+  Personal.beforeCreate((user) => (user.id = uuidv4()));
+
   return Personal;
 };

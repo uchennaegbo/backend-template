@@ -1,13 +1,15 @@
-'use strict';
+import { uuid as uuidv4 } from 'uuid/v4';
+
+('use strict');
 module.exports = (sequelize, DataTypes) => {
-  const Staff = sequelize.define(
-    'Staff',
+  const Candidate = sequelize.define(
+    'Candidate',
     {
       name: DataTypes.STRING,
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        // unique: true,
       },
       phone: DataTypes.STRING,
       level: {
@@ -23,11 +25,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  Staff.associate = function (models) {
+  Candidate.associate = function (models) {
     // associations can be defined here
     const { Personal, Work } = models;
-    Staff.hasOne(Personal);
-    Staff.hasOne(Work);
+    Candidate.hasOne(Personal);
+    Candidate.hasOne(Work);
   };
-  return Staff;
+
+  Candidate.beforeCreate((user) => (user.id = uuidv4()));
+  return Candidate;
 };

@@ -1,17 +1,18 @@
-'use strict';
+('use strict');
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Personals', {
       id: {
         allowNull: false,
-        autoIncrement: true,
+        // autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
       },
-      staffId: {
-        type: Sequelize.INTEGER,
+      candidateId: {
+        type: Sequelize.UUID,
         references: {
-          model: 'Staffs',
+          model: 'Candidates',
           key: 'id',
         },
         allowNull: false,
