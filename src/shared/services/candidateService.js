@@ -1,9 +1,25 @@
 import db from '@models';
-const { Candidate } = db;
+const { Candidate, Personal, Work } = db;
 
 export const getCandidateById = async (candidateId) => {
   const found = await Candidate.findOne({
     where: { id: candidateId },
+  });
+  console.log(found, ">>>>>>><<<<<<<<<");
+  return found;
+};
+
+export const getPersonalRefereeCandidateById = async (candidateId) => {
+  const found = await Personal.findOne({
+    where: { candidateId },
+  });
+
+  return found;
+};
+
+export const getWorkRefereeCandidateById = async (candidateId) => {
+  const found = await Work.findOne({
+    where: { candidateId },
   });
 
   return found;

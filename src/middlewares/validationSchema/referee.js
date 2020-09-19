@@ -1,10 +1,10 @@
 import joi from '@hapi/joi';
 
-export const addReferee = joi.object({
-  personalRefFirstName: joi.string().min(2).max(55).required(),
-  personalRefLastName: joi.string().min(2).max(55).required(),
-  personalRefEmail: joi.string().email().required(),
-  lastEmployerRefFirstName: joi.string().min(2).max(55).required(),
-  lastEmployerRefLastName: joi.string().min(2).max(55).required(),
-  lastEmployerRefEmail: joi.string().email().trim().required(),
+export const onboardRefereeSchema = joi.object({
+  personals: joi.array().items({
+    firstName: joi.string().min(2).max(35).trim().required(),
+    lastName: joi.string().min(2).max(35).trim().required(),
+    email: joi.string().email().required(),
+    candidateId: joi.string().uuid().required(),
+  }),
 });

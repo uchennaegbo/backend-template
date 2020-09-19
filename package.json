@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node ./src/index.js",
-    "start:dev": "nodemon --exec babel-node ./src/index.js",
+    "dev": "nodemon --exec babel-node ./src/index.js",
     "migrate": "sequelize db:migrate --env development",
     "unmigrate": "sequelize db:migrate:undo:all --env development",
     "db:reset:dev": "npm run unmigrate && npm run migrate",

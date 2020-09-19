@@ -4,6 +4,7 @@ import * as service from './service';
 import { validateCandidateEmail } from '../../shared/services/validateEmail';
 import sendMail from '../../shared/messaging/sendmail';
 import { getCandidateById } from '../../shared/services/candidateService';
+import settings from '../../settings.json';
 
 // Handle candidate form details
 export const registerCandidate = async (req, res) => {
@@ -14,26 +15,30 @@ export const registerCandidate = async (req, res) => {
 
     const onboarded = await service.onboard(req.body);
 
-    const { id, name, email } = onboarded;
+    const { id, firstName, lastName, email } = onboarded;
     // TODO: GENERATE UNIQUE URL
     const generatedUrl = generateUniqueUrl(
       id,
-      name.replace(/\s/g, '').toLocaleLowerCase()
+      `${firstName}${lastName}`.replace(/\s/g, '').toLocaleLowerCase()
     );
     // SEND EMAIL
-    const emailSent = await sendMail(
-      `Dear ${name}, Kindly click on the link below to provide two references to further complete your application.\n ${generatedUrl}`,
-      `REFEREES UPDATE`,
-      email
-    );
+    if (settings.sendMail) {
+      const emailSent = await sendMail(
+        `Dear ${firstName} ${lastName}, \n \nKindly click on the link below to provide your three(3) mandatory references to further complete your application.\n${generatedUrl} \n \n Kind Regards.`,
+        `REFEREES UPDATE`,
+        email
+      );
+    }
     // RETURN RESPOSE
-    console.log(onboarded, emailSent);
+    console.log(onboarded, generateUniqueUrl);
 
     return response(res, 200, onboarded);
   } catch (error) {
+    console.log(error);
     return response(res, 500, error.message);
   }
 };
+
 
 export const getCandidate = async (req, res) => {
   const { id } = req.params;

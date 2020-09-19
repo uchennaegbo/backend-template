@@ -7,7 +7,8 @@ export const onboard = async (details) => {
 
   try {
     const newCandidate = await Candidate.create({
-      name: `${firstName} ${lastName}`,
+      firstName,
+      lastName,
       email,
       phone,
       level,
@@ -19,6 +20,7 @@ export const onboard = async (details) => {
     if (error.parent.message.includes('duplicate')) {
       msg = 'Email already exists.';
     }
+    console.log(msg)
     throw new Error(msg);
   }
 };

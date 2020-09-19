@@ -2,28 +2,28 @@ import db from '@models';
 
 const { Personal, Work } = db;
 
-export const onboard = async (details) => {
-  const {
-    personalRefFirstName,
-    personalRefLastName,
-    personalRefEmail,
-    lastEmployerRefFirstName,
-    lastEmployerRefLastName,
-    lastEmployerRefEmail,
-  } = details;
-
+export const onboardPersonalReferees = async (details) => {
   try {
-    const newPersonalReferee = await Personal.create({
-      name: `${personalRefFirstName} ${personalRefLastName}`,
-      email: personalRefEmail,
-    });
+    const newPersonalReferees = await Personal.bulkCreate(details);
 
-    const newWorkReferee = await Work.create({
-      name: `${lastEmployerRefFirstName} ${lastEmployerRefLastName}`,
-      email: lastEmployerRefEmail,
-    });
-    return { newPersonalReferee, newWorkReferee };
+    return  newPersonalReferees;
   } catch (error) {
+    let msg = error.message;
+    if (error.parent.message.includes('duplicate')) {
+      msg = 'Email already exists.';
+    }
+    throw new Error(msg);
+  }
+};
+
+
+export const onboardExperienceReferees = async (details) => {
+  try {
+    const newExperienceReferees = await Work.bulkCreate(details);
+
+    return { newExperienceReferees };
+  } catch (error) {
+    console.log(error);
     let msg = error.message;
     if (error.parent.message.includes('duplicate')) {
       msg = 'Email already exists.';

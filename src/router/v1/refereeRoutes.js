@@ -1,12 +1,22 @@
 import express from 'express';
-import { personalReferee, lastEmployer, registerReferee } from '../../controllers/referee';
-import { addReferee } from '../../middlewares/validationSchema/referee';
+import {
+  registerPersonalReferees,
+  registerWorkReferees,
+  } from '../../controllers/referee';
+import { onboardRefereeSchema } from '../../middlewares/validationSchema/referee';
 import validatePayload from '../../middlewares/validationSchema/validation';
 
 const router = express.Router();
 
-router.post('/register-ref', validatePayload(addReferee), registerReferee);
-// router.post('/entry', personalReferee);
-// router.post('/experienced', lastEmployer);
+router.post(
+  '/entry/:id',
+  validatePayload(onboardRefereeSchema),
+  registerPersonalReferees
+);
+// router.post(
+//   '/experienced',
+//   validatePayload(onboardRefereeSchema),
+//   registerWorkReferees
+// );
 
 export default router;
