@@ -6,7 +6,7 @@ export const onboardPersonalReferees = async (details) => {
   try {
     const newPersonalReferees = await Personal.bulkCreate(details);
 
-    return  newPersonalReferees;
+    return newPersonalReferees;
   } catch (error) {
     let msg = error.message;
     if (error.parent.message.includes('duplicate')) {
@@ -16,14 +16,17 @@ export const onboardPersonalReferees = async (details) => {
   }
 };
 
-
 export const onboardExperienceReferees = async (details) => {
-  try {
-    const newExperienceReferees = await Work.bulkCreate(details);
+  const personals = details.slice(0, 2);
 
-    return { newExperienceReferees };
+  try {
+    const newExperiencePersonalReferees = await Personal.bulkCreate(personals);
+    const newExperienceReferees = await Work.create(details.slice(-1)[0]);
+
+    console.log([newExperiencePersonalReferees, newExperienceReferees]);
+    return [...newExperiencePersonalReferees, newExperienceReferees];
   } catch (error) {
-    console.log(error);
+    console.log(error, ' SEQUELIZE');
     let msg = error.message;
     if (error.parent.message.includes('duplicate')) {
       msg = 'Email already exists.';

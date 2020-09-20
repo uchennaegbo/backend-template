@@ -1,4 +1,4 @@
-import { uuid as uuidv4 } from 'uuid/v4';
+// import { uuid as uuidv4 } from 'uuid/v4';
 
 ('use strict');
 module.exports = (sequelize, DataTypes) => {
@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  Work.beforeCreate((user) => (user.id = uuidv4()));
+  // Work.beforeCreate((user) => (user.id = uuidv4()));
 
   return Work;
 };

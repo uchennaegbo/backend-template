@@ -1,22 +1,25 @@
 import express from 'express';
 import {
+  registerExperienceReferees,
   registerPersonalReferees,
-  registerWorkReferees,
-  } from '../../controllers/referee';
-import { onboardRefereeSchema } from '../../middlewares/validationSchema/referee';
+} from '../../controllers/referee';
+import {
+  onboardExpRefereeSchema,
+  onboardRefereeSchema,
+} from '../../middlewares/validationSchema/referee';
 import validatePayload from '../../middlewares/validationSchema/validation';
 
 const router = express.Router();
 
 router.post(
-  '/entry/:id',
+  '/entry',
   validatePayload(onboardRefereeSchema),
   registerPersonalReferees
 );
-// router.post(
-//   '/experienced',
-//   validatePayload(onboardRefereeSchema),
-//   registerWorkReferees
-// );
+router.post(
+  '/experienced',
+  validatePayload(onboardExpRefereeSchema),
+  registerExperienceReferees
+);
 
 export default router;

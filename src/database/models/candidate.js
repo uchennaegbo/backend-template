@@ -1,4 +1,3 @@
-// import { uuid as uuidv4 } from 'uuid/v4';
 
 ('use strict');
 module.exports = (sequelize, DataTypes) => {
@@ -38,6 +37,6 @@ module.exports = (sequelize, DataTypes) => {
     Candidate.hasOne(Work);
   };
 
-  // Candidate.beforeCreate((user) => (user.id = uuidv4()));
+  
   return Candidate;
 };
