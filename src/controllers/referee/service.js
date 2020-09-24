@@ -3,11 +3,13 @@ import db from '@models';
 const { Personal, Work } = db;
 
 export const onboardPersonalReferees = async (details) => {
+  console.log(details);
   try {
     const newPersonalReferees = await Personal.bulkCreate(details);
 
     return newPersonalReferees;
   } catch (error) {
+    console.log(error);
     let msg = error.message;
     if (error.parent.message.includes('duplicate')) {
       msg = 'Email already exists.';
@@ -26,7 +28,6 @@ export const onboardExperienceReferees = async (details) => {
     console.log([newExperiencePersonalReferees, newExperienceReferees]);
     return [...newExperiencePersonalReferees, newExperienceReferees];
   } catch (error) {
-    console.log(error, ' SEQUELIZE');
     let msg = error.message;
     if (error.parent.message.includes('duplicate')) {
       msg = 'Email already exists.';

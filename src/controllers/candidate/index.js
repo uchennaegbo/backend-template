@@ -1,7 +1,6 @@
 import response from '@response';
 import { generateUniqueUrl } from '../../utils';
 import * as service from './service';
-import { validateCandidateEmail } from '../../shared/services/validateEmail';
 import sendMail from '../../shared/messaging/sendmail';
 import { getCandidateById } from '../../shared/services/candidateService';
 import settings from '../../settings.json';
@@ -9,9 +8,6 @@ import settings from '../../settings.json';
 // Handle candidate form details
 export const registerCandidate = async (req, res) => {
   try {
-    if (!validateCandidateEmail(req.body.email)) {
-      return response(res, 401, 'Value must be a valid Access Bank email.');
-    }
 
     const onboarded = await service.onboard(req.body);
 

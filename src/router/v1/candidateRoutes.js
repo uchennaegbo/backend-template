@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerCandidate ,getCandidate} from '../../controllers/candidate';
+import { registerCandidate, getCandidate } from '../../controllers/candidate';
 import { onboardCandidateSchema } from '../../middlewares/validationSchema/candidate';
 
 import validatePayload from '../../middlewares';
@@ -12,9 +12,6 @@ router.post(
   registerCandidate
 );
 
-router.get(
-    '/getCandidate/:id',
-    getCandidate
-  );
+router.get('/get-candidate/:id', getCandidate);
 
 export default router;

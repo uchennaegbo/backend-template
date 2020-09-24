@@ -4,7 +4,6 @@ module.exports = {
     return queryInterface.createTable('performanceStandards', {
       id: {
         allowNull: false,
-        // autoIncrement: true,
         primaryKey: true,
         type: Sequelize.UUID,
       },

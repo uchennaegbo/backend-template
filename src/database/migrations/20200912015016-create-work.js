@@ -19,6 +19,15 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
+      },
+      phone: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      coy: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       candidateId: {
         type: Sequelize.UUID,

@@ -2,11 +2,18 @@ import db from '@models';
 const { Candidate, Personal, Work } = db;
 
 export const getCandidateById = async (candidateId) => {
-  const found = await Candidate.findOne({
-    where: { id: candidateId },
-  });
-  console.log(found, ">>>>>>><<<<<<<<<");
-  return found;
+  try {
+    const found = await Candidate.findOne({
+      where: { id: candidateId },
+    });
+    return found;
+  } catch (error) {
+    let msg = error.message;
+    if (error.parent.message.includes('uuid')) {
+      msg = 'Invalid User Id.';
+    }
+    throw new Error(msg);
+  }
 };
 
 export const getPersonalRefereeCandidateById = async (candidateId) => {

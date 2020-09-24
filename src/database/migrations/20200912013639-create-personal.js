@@ -4,7 +4,6 @@ module.exports = {
     return queryInterface.createTable('Personals', {
       id: {
         allowNull: false,
-        // autoIncrement: true,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -18,6 +17,15 @@ module.exports = {
         allowNull: false,
       },
       email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      phone: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      coy: {
         type: Sequelize.STRING,
         allowNull: false,
       },

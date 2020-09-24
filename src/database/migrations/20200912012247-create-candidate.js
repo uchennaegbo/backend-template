@@ -4,7 +4,6 @@ module.exports = {
     return queryInterface.createTable('Candidates', {
       id: {
         allowNull: false,
-        // autoIncrement: true,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -19,11 +18,13 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING,
-        // unique: true,
+        unique: true,
         allowNull: false,
       },
       phone: {
         type: Sequelize.STRING,
+        unique: true,
+        allowNull: false,
       },
       level: {
         type: Sequelize.ENUM,

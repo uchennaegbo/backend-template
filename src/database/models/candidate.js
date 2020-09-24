@@ -1,4 +1,3 @@
-
 ('use strict');
 module.exports = (sequelize, DataTypes) => {
   const Candidate = sequelize.define(
@@ -7,16 +6,20 @@ module.exports = (sequelize, DataTypes) => {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        primaryKey: true
+        primaryKey: true,
       },
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
       email: {
         type: DataTypes.STRING,
         allowNull: false,
-        // unique: true,
+        unique: true,
       },
-      phone: DataTypes.STRING,
+      phone: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+      },
       level: {
         type: DataTypes.ENUM,
         values: ['entry', 'experienced'],
@@ -37,6 +40,5 @@ module.exports = (sequelize, DataTypes) => {
     Candidate.hasOne(Work);
   };
 
-  
   return Candidate;
 };
