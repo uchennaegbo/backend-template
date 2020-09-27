@@ -4,7 +4,11 @@ import * as service from './service';
 import { validateRefereeEmail } from '../../shared/services/validateEmail';
 import sendMail from '../../shared/messaging/sendmail';
 import settings from '../../settings.json';
-import { getCandidateById } from '../../shared/services/candidateService';
+import {
+  getCandidateById,
+  getPersonalRefereeCandidateById,
+} from '../../shared/services/candidateService';
+import { updatePersonalRefereeById } from '../../shared/services/refereeService';
 
 // Handle Referee form details
 export const registerPersonalReferees = async (req, res) => {
@@ -18,7 +22,7 @@ export const registerPersonalReferees = async (req, res) => {
 
     const onboarded = await service.onboardPersonalReferees(personals);
 
-    for (const { candidateId, firstName, lastName, email } of onboarded) {
+    for (const { candidateId, firstName, id, email } of onboarded) {
       const { firstName: first, lastName: last } = await getCandidateById(
         candidateId
       );
@@ -26,11 +30,8 @@ export const registerPersonalReferees = async (req, res) => {
       const candidateName = `${first} ${last}`;
 
       // GENERATE UNIQUE URL
-      const generatedUrl = generateUniqueUrl(
-        candidateId,
-        `${firstName}${lastName}`.replace(/\s/g, '').toLocaleLowerCase(),
-        'referee'
-      );
+      const generatedUrl = generateUniqueUrl(candidateId, id, 'referee');
+      
       // SEND EMAIL
       if (settings.sendMail) {
         const emailSent = await sendMail(
@@ -97,6 +98,43 @@ export const registerExperienceReferees = async (req, res) => {
     return response(res, 200, onboarded);
   } catch (error) {
     console.log(error);
+    return response(res, 500, error.message);
+  }
+};
+
+export const getRefereeByCandidateId = async (req, res) => {
+  const { candidateId, id } = req.params;
+  console.log(req.params);
+  console.log({ candidateId, id });
+
+  try {
+    const foundReferee = await getPersonalRefereeCandidateById(candidateId, id);
+    if (!foundReferee) {
+      return response(res, 404, 'Referee does not exist');
+    }
+    console.log(foundReferee, " THIS IS THE GOTTEN REFEREE");
+
+    return response(res, 200, foundReferee);
+  } catch (error) {
+    console.log({error}, "PPPPPPPPPPPPP");
+    return response(res, 500, error.message);
+  }
+};
+
+
+export const updatPersonalRefereeInfo = async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+
+  try {
+    const foundReferee = await updatePersonalRefereeById(id, data);
+    if (!foundReferee) {
+      return response(res, 404, 'Error fetching Referee.');
+    }
+    console.log(foundReferee, "Updated Records");
+
+    return response(res, 200, foundReferee);
+  } catch (error) {
     return response(res, 500, error.message);
   }
 };

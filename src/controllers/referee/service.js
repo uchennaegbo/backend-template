@@ -3,8 +3,8 @@ import db from '@models';
 const { Personal, Work } = db;
 
 export const onboardPersonalReferees = async (details) => {
-  console.log(details);
   try {
+    console.log(details, "ALL REFEREES CREATED");
     const newPersonalReferees = await Personal.bulkCreate(details);
 
     return newPersonalReferees;

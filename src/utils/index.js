@@ -1,3 +1,3 @@
-export const generateUniqueUrl = (id, name, path = 'candidate', ) => {
-  return `${process.env.FRONTENDURL}/${path}/${id}/${name}`;
+export const generateUniqueUrl = (id, refId = '', path = 'candidate') => {
+  return `${process.env.FRONTENDURL}/${path}/${id}/${refId}`;
 };

@@ -1,6 +1,3 @@
-import { uuid as uuidv4 } from 'uuid/v4';
-
-
 
 ('use strict');
 module.exports = (sequelize, DataTypes) => {
@@ -16,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
       email: DataTypes.STRING,
+      phone:DataTypes.STRING,
+      coy: DataTypes.STRING,
       candidateId: DataTypes.UUID,
       relationship: DataTypes.STRING,
       howLong: DataTypes.STRING,

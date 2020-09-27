@@ -8,15 +8,11 @@ import settings from '../../settings.json';
 // Handle candidate form details
 export const registerCandidate = async (req, res) => {
   try {
-
     const onboarded = await service.onboard(req.body);
 
     const { id, firstName, lastName, email } = onboarded;
     // TODO: GENERATE UNIQUE URL
-    const generatedUrl = generateUniqueUrl(
-      id,
-      `${firstName}${lastName}`.replace(/\s/g, '').toLocaleLowerCase()
-    );
+    const generatedUrl = generateUniqueUrl(id);
     // SEND EMAIL
     if (settings.sendMail) {
       const emailSent = await sendMail(
@@ -26,7 +22,7 @@ export const registerCandidate = async (req, res) => {
       );
     }
     // RETURN RESPOSE
-    console.log(onboarded, generateUniqueUrl);
+    console.log(onboarded);
 
     return response(res, 200, onboarded);
   } catch (error) {
@@ -34,7 +30,6 @@ export const registerCandidate = async (req, res) => {
     return response(res, 500, error.message);
   }
 };
-
 
 export const getCandidate = async (req, res) => {
   const { id } = req.params;

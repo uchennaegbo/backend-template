@@ -16,8 +16,29 @@ export const getCandidateById = async (candidateId) => {
   }
 };
 
-export const getPersonalRefereeCandidateById = async (candidateId) => {
-  const found = await Personal.findOne({
+export const getPersonalRefereeCandidateById = async (candidateId, id) => {
+  console.log({ candidateId, refId }, 'Inside Service');
+  try {
+    const found = await Personal.findOne({
+      where: {
+        candidateId,
+        id,
+      },
+    });
+    console.log(found, "UYTREWSXCFVGHJNBVCFGVCXD");
+    return found;
+  } catch (error) {
+    console.log({ error }, "WWWWWWWWWWWW");
+    let msg = error.message;
+    if (error.parent.message.includes('uuid')) {
+      msg = 'Invalid User Id.';
+    }
+    throw new Error(msg);
+  }
+};
+
+export const getPersonalRefereesCandidateById = async (candidateId) => {
+  const found = await Personal.findAll({
     where: { candidateId },
   });
 

@@ -1,7 +1,9 @@
 import express from 'express';
 import {
+  getRefereeByCandidateId,
   registerExperienceReferees,
   registerPersonalReferees,
+  updatPersonalRefereeInfo,
 } from '../../controllers/referee';
 import {
   onboardExpRefereeSchema,
@@ -21,5 +23,7 @@ router.post(
   validatePayload(onboardExpRefereeSchema),
   registerExperienceReferees
 );
+router.put('/update/:id', updatPersonalRefereeInfo);
+router.get('/get-referee/:candidateId/:id', getRefereeByCandidateId);
 
 export default router;
