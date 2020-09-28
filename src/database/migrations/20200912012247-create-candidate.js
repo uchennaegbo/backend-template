@@ -47,6 +47,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Candidate');
+    return queryInterface.dropTable('Candidates');
   },
 };

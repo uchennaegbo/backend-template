@@ -1,19 +1,17 @@
-
 ('use strict');
 module.exports = (sequelize, DataTypes) => {
   const Personal = sequelize.define(
     'Personal',
     {
-      
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        primaryKey: true
+        primaryKey: true,
       },
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
       email: DataTypes.STRING,
-      phone:DataTypes.STRING,
+      phone: DataTypes.STRING,
       coy: DataTypes.STRING,
       candidateId: DataTypes.UUID,
       relationship: DataTypes.STRING,
@@ -26,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       honesty: DataTypes.TEXT,
       recommendations: DataTypes.TEXT,
       comments: DataTypes.TEXT,
-      signature: DataTypes.TEXT,
+      signature: DataTypes.BOOLEAN,
       date: DataTypes.DATE,
     },
     {}
@@ -35,7 +33,8 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     const { Candidate } = models;
     Personal.belongsTo(Candidate, {
-      foreign: 'candidateId',
+      foreignKey: 'candidateId',
+      as: 'personal',
     });
   };
   Personal.beforeCreate((user) => (user.id = uuidv4()));

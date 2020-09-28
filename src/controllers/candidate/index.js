@@ -2,7 +2,7 @@ import response from '@response';
 import { generateUniqueUrl } from '../../utils';
 import * as service from './service';
 import sendMail from '../../shared/messaging/sendmail';
-import { getCandidateById } from '../../shared/services/candidateService';
+import { getAllPersonalRefereesCandidateById, getCandidateById } from '../../shared/services/candidateService';
 import settings from '../../settings.json';
 
 // Handle candidate form details
@@ -39,10 +39,20 @@ export const getCandidate = async (req, res) => {
     if (!foundCandidate) {
       return response(res, 404, 'User does not exist');
     }
-    console.log(foundCandidate);
 
     return response(res, 200, foundCandidate);
   } catch (error) {
     return response(res, 500, error.message);
   }
 };
+
+// export const checkReferee = () => {
+//   const {id}=req.params;
+//   try {
+//     const foundReferees=await getAllPersonalRefereesCandidateById(id);
+//   if (!foundReferee) {
+    
+//   }  } catch (error) {
+    
+//   }
+// }

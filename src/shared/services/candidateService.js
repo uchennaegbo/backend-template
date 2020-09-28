@@ -5,9 +5,14 @@ export const getCandidateById = async (candidateId) => {
   try {
     const found = await Candidate.findOne({
       where: { id: candidateId },
+      include: [
+        { model: db.Personal, as: 'personal' },
+        { model: Work, as: 'work' },
+      ],
     });
     return found;
   } catch (error) {
+    console.log({ error });
     let msg = error.message;
     if (error.parent.message.includes('uuid')) {
       msg = 'Invalid User Id.';
@@ -17,7 +22,6 @@ export const getCandidateById = async (candidateId) => {
 };
 
 export const getPersonalRefereeCandidateById = async (candidateId, id) => {
-  console.log({ candidateId, refId }, 'Inside Service');
   try {
     const found = await Personal.findOne({
       where: {
@@ -25,10 +29,8 @@ export const getPersonalRefereeCandidateById = async (candidateId, id) => {
         id,
       },
     });
-    console.log(found, "UYTREWSXCFVGHJNBVCFGVCXD");
     return found;
   } catch (error) {
-    console.log({ error }, "WWWWWWWWWWWW");
     let msg = error.message;
     if (error.parent.message.includes('uuid')) {
       msg = 'Invalid User Id.';
@@ -37,12 +39,20 @@ export const getPersonalRefereeCandidateById = async (candidateId, id) => {
   }
 };
 
-export const getPersonalRefereesCandidateById = async (candidateId) => {
-  const found = await Personal.findAll({
-    where: { candidateId },
-  });
-
-  return found;
+export const getAllPersonalRefereesCandidateById = async (candidateId) => {
+  try {
+    const found = await Candidate.findOne({
+      where: { candidateId },
+      includes: [{ models: Personal }, { models: Work }],
+    });
+    return found;
+  } catch (error) {
+    let msg = error.message;
+    if (error.parent.message.includes('uuid')) {
+      msg = 'Invalid User Id.';
+    }
+    throw new Error(msg);
+  }
 };
 
 export const getWorkRefereeCandidateById = async (candidateId) => {

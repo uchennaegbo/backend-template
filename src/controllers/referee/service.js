@@ -4,7 +4,8 @@ const { Personal, Work } = db;
 
 export const onboardPersonalReferees = async (details) => {
   try {
-    console.log(details, "ALL REFEREES CREATED");
+    console.log(details, "ALL REFEREES TO BE CREATED");
+    
     const newPersonalReferees = await Personal.bulkCreate(details);
 
     return newPersonalReferees;

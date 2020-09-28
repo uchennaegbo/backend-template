@@ -67,7 +67,7 @@ module.exports = {
         type: Sequelize.TEXT,
       },
       signature: {
-        type: Sequelize.TEXT,
+        type: Sequelize.BOOLEAN,
       },
       date: {
         type: Sequelize.DATE,

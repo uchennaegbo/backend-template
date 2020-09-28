@@ -1,4 +1,3 @@
-
 ('use strict');
 module.exports = (sequelize, DataTypes) => {
   const Work = sequelize.define(
@@ -12,15 +11,15 @@ module.exports = (sequelize, DataTypes) => {
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
       email: DataTypes.STRING,
-      phone:DataTypes.STRING,
+      phone: DataTypes.STRING,
       coy: DataTypes.STRING,
       candidateId: DataTypes.UUID,
       dateJoined: DataTypes.DATE,
       dateLeft: DataTypes.DATE,
       reasons: DataTypes.STRING,
       otherComments: DataTypes.TEXT,
-      finalSalary: DataTypes.INTEGER,
-      otherAllowances: DataTypes.INTEGER,
+      finalSalary: DataTypes.STRING,
+      otherAllowances: DataTypes.STRING,
       lastPositionHeld: DataTypes.STRING,
       performanceStandardId: DataTypes.UUID,
       reEmploy: DataTypes.TEXT,
@@ -28,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       honesty: DataTypes.TEXT,
       recommendations: DataTypes.TEXT,
       generalComments: DataTypes.TEXT,
-      signature: DataTypes.TEXT,
+      signature: DataTypes.BOOLEAN,
       date: DataTypes.DATE,
     },
     {}
@@ -37,7 +36,8 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     const { Candidate, performanceStandard } = models;
     Work.belongsTo(Candidate, {
-      foreign: 'candidateId',
+      foreignKey: 'candidateId',
+      as: 'work',
     });
 
     Work.belongsTo(performanceStandard, {

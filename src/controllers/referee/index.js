@@ -13,6 +13,8 @@ import { updatePersonalRefereeById } from '../../shared/services/refereeService'
 // Handle Referee form details
 export const registerPersonalReferees = async (req, res) => {
   const { personals } = req.body;
+  console.log(personals, ">>>>> DATA RECEIVED")
+  
   try {
     for (const value of personals) {
       if (validateRefereeEmail(value.email)) {
@@ -104,8 +106,7 @@ export const registerExperienceReferees = async (req, res) => {
 
 export const getRefereeByCandidateId = async (req, res) => {
   const { candidateId, id } = req.params;
-  console.log(req.params);
-  console.log({ candidateId, id });
+  console.log(req.params, "PARAMSSSSSSSSSS");
 
   try {
     const foundReferee = await getPersonalRefereeCandidateById(candidateId, id);

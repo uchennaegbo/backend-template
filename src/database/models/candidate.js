@@ -36,8 +36,14 @@ module.exports = (sequelize, DataTypes) => {
   Candidate.associate = function (models) {
     // associations can be defined here
     const { Personal, Work } = models;
-    Candidate.hasOne(Personal);
-    Candidate.hasOne(Work);
+    Candidate.hasOne(Personal, {
+      foreignKey: 'candidateId',
+      as: 'personal',
+    });
+    Candidate.hasOne(Work, {
+      foreignKey: 'candidateId',
+      as: 'work',
+    });
   };
 
   return Candidate;

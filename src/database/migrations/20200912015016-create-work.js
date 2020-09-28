@@ -79,7 +79,7 @@ module.exports = {
         type: Sequelize.TEXT,
       },
       signature: {
-        type: Sequelize.TEXT,
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,
@@ -87,6 +87,9 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE,
+      },
+      date: {
         type: Sequelize.DATE,
       },
     });
