@@ -6,15 +6,17 @@ import sendMail from '../../shared/messaging/sendmail';
 import settings from '../../settings.json';
 import {
   getCandidateById,
-  getPersonalRefereeCandidateById,
+  getRefereeByCandidateId,
 } from '../../shared/services/candidateService';
-import { updatePersonalRefereeById } from '../../shared/services/refereeService';
+import {
+  updatePersonalRefereeById,
+  updateWorkRefereeById,
+} from '../../shared/services/refereeService';
 
 // Handle Referee form details
 export const registerPersonalReferees = async (req, res) => {
   const { personals } = req.body;
-  console.log(personals, ">>>>> DATA RECEIVED")
-  
+
   try {
     for (const value of personals) {
       if (validateRefereeEmail(value.email)) {
@@ -33,7 +35,7 @@ export const registerPersonalReferees = async (req, res) => {
 
       // GENERATE UNIQUE URL
       const generatedUrl = generateUniqueUrl(candidateId, id, 'referee');
-      
+
       // SEND EMAIL
       if (settings.sendMail) {
         const emailSent = await sendMail(
@@ -65,7 +67,9 @@ export const registerExperienceReferees = async (req, res) => {
 
     const onboarded = await service.onboardExperienceReferees(values);
 
-    for (const { candidateId, firstName, lastName, email } of onboarded) {
+    for (const prop in onboarded) {
+      const { candidateId, firstName, id, email } = onboarded[prop];
+
       const { firstName: first, lastName: last } = await getCandidateById(
         candidateId
       );
@@ -73,29 +77,25 @@ export const registerExperienceReferees = async (req, res) => {
       const candidateName = `${first} ${last}`;
 
       // GENERATE UNIQUE URL
-      const generatedUrl = generateUniqueUrl(
-        candidateId,
-        `${firstName}${lastName}`.replace(/\s/g, '').toLocaleLowerCase(),
-        'referee'
-      );
+      const generatedUrl = generateUniqueUrl(candidateId, id, 'referee');
       // SEND EMAIL
       let emailSent;
-      if (settings.sendMail) {
+      if (settings.sendMail && prop > onboarded.length - 2) {
         emailSent = await sendMail(
-          `Dear ${firstName}, \n\n${candidateName} has provided you as their personal referee. Kindly click on the link below to fill out the reference form to further complete their application.\n${generatedUrl}\n \n\nKind Regards.`,
+          `Dear ${firstName}, \n\n${candidateName} has provided you as their Last Employer. Kindly click on the link below to fill out the reference form to further complete their application.\n${generatedUrl}\n \n\nKind Regards.`,
           `REFEREES FORM`,
           email
         );
       } else {
         emailSent = await sendMail(
-          `Dear ${firstName}, \n\n${candidateName} has provided you as their Last Employer. Kindly click on the link below to fill out the reference form to further complete their application.\n${generatedUrl}\n \n\nKind Regards.`,
+          `Dear ${firstName}, \n\n${candidateName} has provided you as their Personal Referee. Kindly click on the link below to fill out the reference form to further complete their application.\n${generatedUrl}\n \n\nKind Regards.`,
           `REFEREES FORM`,
           email
         );
       }
     }
     // RETURN RESPOSE
-    console.log(onboarded);
+    // console.log(onboarded);
 
     return response(res, 200, onboarded);
   } catch (error) {
@@ -104,24 +104,20 @@ export const registerExperienceReferees = async (req, res) => {
   }
 };
 
-export const getRefereeByCandidateId = async (req, res) => {
+export const getReferee = async (req, res) => {
   const { candidateId, id } = req.params;
-  console.log(req.params, "PARAMSSSSSSSSSS");
 
   try {
-    const foundReferee = await getPersonalRefereeCandidateById(candidateId, id);
+    const foundReferee = await getRefereeByCandidateId(candidateId, id);
     if (!foundReferee) {
       return response(res, 404, 'Referee does not exist');
     }
-    console.log(foundReferee, " THIS IS THE GOTTEN REFEREE");
 
     return response(res, 200, foundReferee);
   } catch (error) {
-    console.log({error}, "PPPPPPPPPPPPP");
     return response(res, 500, error.message);
   }
 };
-
 
 export const updatPersonalRefereeInfo = async (req, res) => {
   const { id } = req.params;
@@ -132,7 +128,22 @@ export const updatPersonalRefereeInfo = async (req, res) => {
     if (!foundReferee) {
       return response(res, 404, 'Error fetching Referee.');
     }
-    console.log(foundReferee, "Updated Records");
+
+    return response(res, 200, foundReferee);
+  } catch (error) {
+    return response(res, 500, error.message);
+  }
+};
+
+export const updateWorkRefereeInfo = async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+
+  try {
+    const foundReferee = await updateWorkRefereeById(id, data);
+    if (!foundReferee) {
+      return response(res, 404, 'Error fetching Referee.');
+    }
 
     return response(res, 200, foundReferee);
   } catch (error) {

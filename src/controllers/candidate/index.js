@@ -2,7 +2,7 @@ import response from '@response';
 import { generateUniqueUrl } from '../../utils';
 import * as service from './service';
 import sendMail from '../../shared/messaging/sendmail';
-import { getAllPersonalRefereesCandidateById, getCandidateById } from '../../shared/services/candidateService';
+import { getAllPersonalRefereesCandidateById, getAllRefereesByCandidateEmail, getCandidateById } from '../../shared/services/candidateService';
 import settings from '../../settings.json';
 
 // Handle candidate form details
@@ -22,7 +22,7 @@ export const registerCandidate = async (req, res) => {
       );
     }
     // RETURN RESPOSE
-    console.log(onboarded);
+    // console.log(onboarded);
 
     return response(res, 200, onboarded);
   } catch (error) {
@@ -46,13 +46,17 @@ export const getCandidate = async (req, res) => {
   }
 };
 
-// export const checkReferee = () => {
-//   const {id}=req.params;
-//   try {
-//     const foundReferees=await getAllPersonalRefereesCandidateById(id);
-//   if (!foundReferee) {
-    
-//   }  } catch (error) {
-    
-//   }
-// }
+export const getAllRefereesByCanEmail = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const foundReferees = await getAllRefereesByCandidateEmail(email);
+    if (!foundReferees) {
+      return response(res, 404, 'Record does not exist');
+    }
+
+    return response(res, 200, foundReferees);
+  } catch (error) {
+    return response(res, 500, error.message);
+  }
+};

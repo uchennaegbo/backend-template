@@ -2,19 +2,37 @@ import db from '@models';
 const { Personal, Work } = db;
 
 export const getPersonalRefereeById = async (pRefId) => {
-  const found = await Personal.findOne({
-    where: { id: pRefId },
-  });
+  try {
+    const found = await Personal.findOne({
+      where: { id: pRefId },
+    });
 
-  return found;
+    return found;
+  } catch (error) {
+    console.log({ error });
+    let msg = error.message;
+    if (error.parent.message.includes('uuid')) {
+      msg = 'Invalid User Id.';
+    }
+    throw new Error(msg);
+  }
 };
 
 export const getWorkRefereeById = async (wRefId) => {
-  const found = await Work.findOne({
-    where: { id: wRefId },
-  });
+  try {
+    const found = await Work.findOne({
+      where: { id: wRefId },
+    });
 
-  return found;
+    return found;
+  } catch (error) {
+    console.log({ error });
+    let msg = error.message;
+    if (error.parent.message.includes('uuid')) {
+      msg = 'Invalid User Id.';
+    }
+    throw new Error(msg);
+  }
 };
 
 export const updatePersonalRefereeById = async (id, data) => {
@@ -53,12 +71,68 @@ export const updatePersonalRefereeById = async (id, data) => {
 
     return updateRef;
   } catch (error) {
-    console.log({ error });
+    let msg = error.message;
+    if (error.parent.message.includes('uuid')) {
+      msg = 'Invalid User Id.';
+    }
+    throw new Error(msg);
   }
 };
 
-export const updateWorkRefereeById = async (wRefId, email) => {
-  const found = await Work.update({ email }, { where: { id: wRefId } });
+export const updateWorkRefereeById = async (id, data) => {
+  const {
+    dateJoined,
+    dateLeft,
+    reasons,
+    otherComments,
+    finalSalary,
+    otherAllowances,
+    lastPositionHeld,
+    reEmploy,
+    designation,
+    generalComments,
+    jobPerformance,
+    relWithColleagues,
+    conduct,
+    reliability,
+    honesty,
+    recommendations,
+    signature,
+    date,
+  } = data;
+  try {
+    const updateRef = await Work.update(
+      {
+        dateJoined,
+        dateLeft,
+        reasons,
+        otherComments,
+        finalSalary,
+        otherAllowances,
+        lastPositionHeld,
+        jobPerformance,
+        relWithColleagues,
+        conduct,
+        reliability,
+        reEmploy,
+        designation,
+        honesty,
+        recommendations,
+        generalComments,
+        signature,
+        date,
+      },
+      { where: { id } }
+    );
 
-  return found;
+    console.log(updateRef);
+    return { updateRef };
+  } catch (error) {
+    console.log({ error });
+    let msg = error.message;
+    if (error.parent.message.includes('uuid')) {
+      msg = 'Invalid User Id.';
+    }
+    throw new Error(msg);
+  }
 };

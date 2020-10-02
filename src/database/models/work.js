@@ -21,7 +21,10 @@ module.exports = (sequelize, DataTypes) => {
       finalSalary: DataTypes.STRING,
       otherAllowances: DataTypes.STRING,
       lastPositionHeld: DataTypes.STRING,
-      performanceStandardId: DataTypes.UUID,
+      jobPerformance: DataTypes.TEXT,
+      conduct: DataTypes.TEXT,
+      reliability: DataTypes.TEXT,
+      relWithColleagues: DataTypes.TEXT,
       reEmploy: DataTypes.TEXT,
       designation: DataTypes.TEXT,
       honesty: DataTypes.TEXT,
@@ -34,18 +37,11 @@ module.exports = (sequelize, DataTypes) => {
   );
   Work.associate = function (models) {
     // associations can be defined here
-    const { Candidate, performanceStandard } = models;
+    const { Candidate } = models;
     Work.belongsTo(Candidate, {
       foreignKey: 'candidateId',
       as: 'work',
     });
-
-    Work.belongsTo(performanceStandard, {
-      foreign: 'performanceStandardId',
-    });
   };
-
-  // Work.beforeCreate((user) => (user.id = uuidv4()));
-
   return Work;
 };

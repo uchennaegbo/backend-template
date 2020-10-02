@@ -4,7 +4,6 @@ const { Candidate } = db;
 
 export const onboard = async (details) => {
   const { firstName, lastName, email, phone, level } = details;
-console.log(details);
   try {
     const newCandidate = await Candidate.create({
       firstName,

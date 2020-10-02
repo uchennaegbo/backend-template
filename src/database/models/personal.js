@@ -37,7 +37,5 @@ module.exports = (sequelize, DataTypes) => {
       as: 'personal',
     });
   };
-  Personal.beforeCreate((user) => (user.id = uuidv4()));
-
   return Personal;
 };

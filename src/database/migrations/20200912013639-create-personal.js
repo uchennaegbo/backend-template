@@ -68,6 +68,7 @@ module.exports = {
       },
       signature: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       date: {
         type: Sequelize.DATE,

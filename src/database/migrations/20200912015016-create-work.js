@@ -48,20 +48,25 @@ module.exports = {
         type: Sequelize.TEXT,
       },
       finalSalary: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       otherAllowances: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       lastPositionHeld: {
         type: Sequelize.STRING,
       },
-      performanceStandardId: {
-        type: Sequelize.UUID,
-        references: {
-          model: 'performanceStandards',
-          key: 'id',
-        },
+      jobPerformance: {
+        type: Sequelize.TEXT,
+      },
+      conduct: {
+        type: Sequelize.TEXT,
+      },
+      reliability: {
+        type: Sequelize.TEXT,
+      },
+      relWithColleagues: {
+        type: Sequelize.TEXT,
       },
       reEmploy: {
         type: Sequelize.TEXT,
@@ -80,6 +85,7 @@ module.exports = {
       },
       signature: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,

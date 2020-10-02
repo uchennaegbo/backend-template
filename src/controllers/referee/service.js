@@ -4,13 +4,10 @@ const { Personal, Work } = db;
 
 export const onboardPersonalReferees = async (details) => {
   try {
-    console.log(details, "ALL REFEREES TO BE CREATED");
-    
     const newPersonalReferees = await Personal.bulkCreate(details);
 
     return newPersonalReferees;
   } catch (error) {
-    console.log(error);
     let msg = error.message;
     if (error.parent.message.includes('duplicate')) {
       msg = 'Email already exists.';
