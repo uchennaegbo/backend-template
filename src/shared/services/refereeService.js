@@ -124,8 +124,9 @@ export const updateWorkRefereeById = async (id, data) => {
       },
       { where: { id } }
     );
+    if (!updateRef) return { error: true, message: 'Invalid user id' };
 
-    console.log(updateRef);
+    // console.log(updateRef);
     return { updateRef };
   } catch (error) {
     console.log({ error });
@@ -136,3 +137,4 @@ export const updateWorkRefereeById = async (id, data) => {
     throw new Error(msg);
   }
 };
+

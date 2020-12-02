@@ -2,28 +2,46 @@ import response from '@response';
 import { generateUniqueUrl } from '../../utils';
 import * as service from './service';
 import sendMail from '../../shared/messaging/sendmail';
-import { getAllPersonalRefereesCandidateById, getAllRefereesByCandidateEmail, getCandidateById } from '../../shared/services/candidateService';
+import {
+  getAllRefereesByCandidateEmail,
+  getCandidateByEmail,
+  getCandidateById,
+} from '../../shared/services/candidateService';
 import settings from '../../settings.json';
+const { HR_EMAIL } = process.env;
 
 // Handle candidate form details
 export const registerCandidate = async (req, res) => {
   try {
     const onboarded = await service.onboard(req.body);
 
-    const { id, firstName, lastName, email } = onboarded;
+    const { id, firstName, lastName, email, level } = onboarded;
     // TODO: GENERATE UNIQUE URL
     const generatedUrl = generateUniqueUrl(id);
     // SEND EMAIL
     if (settings.sendMail) {
-      const emailSent = await sendMail(
-        `Dear ${firstName} ${lastName}, \n \nKindly click on the link below to provide your three(3) mandatory references to further complete your application.\n${generatedUrl} \n \n Kind Regards.`,
-        `REFEREES UPDATE`,
-        email
+      if (level !== 'entry') {
+        await sendMail(
+          `Dear ${firstName} ${lastName},\nKindly click on the link below to fill in details of your referees.\n${generatedUrl}\nPlease note the first two referees to be provided are your personal references and the last referee to be provided must be your last employer.\nKind regards.`,
+          `ACCESS BANK REFEREES UPDATE`,
+          email
+        );
+      } else {
+        await sendMail(
+          `Dear ${firstName} ${lastName},\nKindly click on the link below to fill in details of your referees.\n${generatedUrl}\nKind regards.`,
+          `ACCESS BANK REFEREES UPDATE`,
+          email
+        );
+      }
+
+      await sendMail(
+        `Dear Team,\n This is to notify you that the candidate "${firstName} ${lastName}" has been created successfully and the reference form link has been sent to the candidate.\n
+        Kind regards.`,
+        `REFERENCE AUTOMATION UPDATE`,
+        HR_EMAIL
       );
     }
-    // RETURN RESPOSE
-    // console.log(onboarded);
-
+    // RETURN RESPONSE
     return response(res, 200, onboarded);
   } catch (error) {
     console.log(error);
@@ -46,12 +64,28 @@ export const getCandidate = async (req, res) => {
   }
 };
 
+export const getCandidateEmail = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const foundCandidate = await getCandidateByEmail(email);
+    if (!foundCandidate) {
+      return response(res, 404, 'User does not exist');
+    }
+
+    return response(res, 200, foundCandidate);
+  } catch (error) {
+    return response(res, 500, error.message);
+  }
+};
+
 export const getAllRefereesByCanEmail = async (req, res) => {
   const { email } = req.body;
 
   try {
     const foundReferees = await getAllRefereesByCandidateEmail(email);
-    if (!foundReferees) {
+    console.log(foundReferees);
+    if (foundReferees.length === 0) {
       return response(res, 404, 'Record does not exist');
     }
 

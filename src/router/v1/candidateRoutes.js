@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerCandidate, getCandidate, getAllRefereesByCanEmail } from '../../controllers/candidate';
+import { registerCandidate, getCandidate, getAllRefereesByCanEmail, getCandidateEmail } from '../../controllers/candidate';
 import { onboardCandidateSchema } from '../../middlewares/validationSchema/candidate';
 
 import validatePayload from '../../middlewares';
@@ -12,6 +12,7 @@ router.post(
   registerCandidate
 );
 
+router.get('/email', getCandidateEmail);
 router.get('/get-candidate/:id', getCandidate);
 router.get('/search', getAllRefereesByCanEmail);
 

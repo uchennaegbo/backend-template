@@ -22,8 +22,6 @@ export const onboardExperienceReferees = async (details) => {
   try {
     const newExperiencePersonalReferees = await Personal.bulkCreate(personals);
     const newExperienceReferees = await Work.create(details.slice(-1)[0]);
-
-    console.log([newExperiencePersonalReferees, newExperienceReferees]);
     return [...newExperiencePersonalReferees, newExperienceReferees];
   } catch (error) {
     let msg = error.message;

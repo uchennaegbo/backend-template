@@ -13,6 +13,8 @@ import {
   updateWorkRefereeById,
 } from '../../shared/services/refereeService';
 
+const { HR_EMAIL } = process.env;
+
 // Handle Referee form details
 export const registerPersonalReferees = async (req, res) => {
   const { personals } = req.body;
@@ -26,10 +28,12 @@ export const registerPersonalReferees = async (req, res) => {
 
     const onboarded = await service.onboardPersonalReferees(personals);
 
-    for (const { candidateId, firstName, id, email } of onboarded) {
-      const { firstName: first, lastName: last } = await getCandidateById(
-        candidateId
-      );
+    for (const { candidateId, firstName, lastName, id, email } of onboarded) {
+      const {
+        firstName: first,
+        lastName: last,
+        email: candidateEmail,
+      } = await getCandidateById(candidateId);
 
       const candidateName = `${first} ${last}`;
 
@@ -39,14 +43,35 @@ export const registerPersonalReferees = async (req, res) => {
       // SEND EMAIL
       if (settings.sendMail) {
         const emailSent = await sendMail(
-          `Dear ${firstName}, \n\n${candidateName} has provided you as their personal referee. Kindly click on the link below to fill out the reference form to further complete their application.\n${generatedUrl}\n \n\nKind Regards.`,
-          `REFEREES FORM`,
+          `Hello  ${firstName},
+
+          This is to notify you that ${candidateName} has been offered employment at Access Bank and has provided you as a personal reference.
+          
+          Kindly click on the link below to fill in accurate details.\n${generatedUrl}\nThank you.
+          
+          Kind regards.`,
+          `ACCESS BANK REFERENCE FORM`,
           email
+        );
+        await sendMail(
+          `Dear Team,\n This is to notify you that the candidate "${candidateName}" has completed their form and has providied ${firstName} ${lastName} as their personal reference. \nKind regards.`,
+          `ACCESS BANK REFERENCE UPDATE`,
+          HR_EMAIL
+        );
+        await sendMail(
+          `Hi ${first},
+  
+        Thank you for filling the reference form.
+        
+        Your response has been sent to the HR team.
+        
+        Kind regards.`,
+          `ACCESS BANK REFERENCE UPDATE`,
+          candidateEmail
         );
       }
     }
-    // RETURN RESPOSE
-    console.log(onboarded);
+    // RETURN RESPONSE
 
     return response(res, 200, onboarded);
   } catch (error) {
@@ -68,11 +93,13 @@ export const registerExperienceReferees = async (req, res) => {
     const onboarded = await service.onboardExperienceReferees(values);
 
     for (const prop in onboarded) {
-      const { candidateId, firstName, id, email } = onboarded[prop];
+      const { candidateId, firstName, lastName, id, email } = onboarded[prop];
 
-      const { firstName: first, lastName: last } = await getCandidateById(
-        candidateId
-      );
+      const {
+        firstName: first,
+        lastName: last,
+        email: candidateEmail,
+      } = await getCandidateById(candidateId);
 
       const candidateName = `${first} ${last}`;
 
@@ -82,24 +109,58 @@ export const registerExperienceReferees = async (req, res) => {
       let emailSent;
       if (settings.sendMail && prop > onboarded.length - 2) {
         emailSent = await sendMail(
-          `Dear ${firstName}, \n\n${candidateName} has provided you as their Last Employer. Kindly click on the link below to fill out the reference form to further complete their application.\n${generatedUrl}\n \n\nKind Regards.`,
-          `REFEREES FORM`,
+          `Hello  ${firstName},
+
+          This is to notify you that ${candidateName} has been offered employment at Access Bank and has provided you as a last employer reference.
+ 
+          Kindly click on the link below to fill in accurate details.\n${generatedUrl}\n 
+
+          Thank you
+
+          Kind regards.`,
+          `ACCESS BANK REFERENCE FORM`,
           email
+        );
+
+        await sendMail(
+          `Dear Team,\n This is to notify you that the candidate "${candidateName}" has completed their form and has providied ${firstName} ${lastName} as their last employer reference.\nKind regards.`,
+          `ACCESS BANK REFERENCE UPDATE`,
+          HR_EMAIL
         );
       } else {
         emailSent = await sendMail(
-          `Dear ${firstName}, \n\n${candidateName} has provided you as their Personal Referee. Kindly click on the link below to fill out the reference form to further complete their application.\n${generatedUrl}\n \n\nKind Regards.`,
-          `REFEREES FORM`,
+          `Hello  ${firstName},
+
+          This is to notify you that ${candidateName} has been offered employment at Access Bank and has provided you as a personal reference.
+          
+          Kindly click on the link below to fill in accurate details.\n${generatedUrl}\n          
+          Thank you
+          
+          Kind regards.`,
+          `ACCESS BANK REFERENCE FORM`,
           email
         );
+        await sendMail(
+          `Dear Team,\nThis is to notify you that the candidate "${candidateName}" has completed their form and has providied ${firstName} ${lastName} as their personal reference.\nKind regards.`,
+          `ACCESS BANK REFERENCE UPDATE`,
+          HR_EMAIL
+        );
       }
+      await sendMail(
+        `Hi ${first},
+
+      Thank you for filling the reference form.
+      
+      Your response has been sent to the HR team.
+      
+      Kind regards.`,
+        `ACCESS BANK REFERENCE AUTOMATION UPDATE`,
+        candidateEmail
+      );
     }
-    // RETURN RESPOSE
-    // console.log(onboarded);
 
     return response(res, 200, onboarded);
   } catch (error) {
-    console.log(error);
     return response(res, 500, error.message);
   }
 };
@@ -128,7 +189,38 @@ export const updatPersonalRefereeInfo = async (req, res) => {
     if (!foundReferee) {
       return response(res, 404, 'Error fetching Referee.');
     }
+    const { firstName, lastName, email, candidateId } = foundReferee;
+    const {
+      firstName: first,
+      lastName: last,
+      email: candidateEmail,
+    } = await getCandidateById(candidateId);
 
+    const candidateName = `${first} ${last}`;
+
+    if (settings.sendMail) {
+      await sendMail(
+        `Hi ${firstName},
+
+      Thank you for filling the reference form.
+      
+      Your response has been sent to the HR team.
+      
+      Kind regards.`,
+        `ACCESS BANK REFERENCE UPDATE`,
+        email
+      );
+      await sendMail(
+        `Dear Team,\nThis is to notify you that the referee "${firstName} ${lastName}" has completed their form as personal referee for "${candidateName}".\nKind regards.`,
+        `ACCESS BANK REFERENCE UPDATE`,
+        HR_EMAIL
+      );
+      await sendMail(
+        `Dear ${candidateName},\nThis is to notify you that your referee "${firstName} ${lastName}" has completed their form as personal referee.\nKind regards.`,
+        `ACCESS BANK REFERENCE UPDATE`,
+        candidateEmail
+      );
+    }
     return response(res, 200, foundReferee);
   } catch (error) {
     return response(res, 500, error.message);
@@ -143,6 +235,39 @@ export const updateWorkRefereeInfo = async (req, res) => {
     const foundReferee = await updateWorkRefereeById(id, data);
     if (!foundReferee) {
       return response(res, 404, 'Error fetching Referee.');
+    }
+    const {
+      firstName: first,
+      lastName: last,
+      email: candidateEmail,
+    } = await getCandidateById(candidateId);
+
+    const { firstName, lastName, email, candidateId } = foundReferee;
+
+    const candidateName = `${first} ${last}`;
+
+    if (settings.sendMail) {
+      await sendMail(
+        `Hi ${firstName},
+
+      Thank you for filling the reference form.
+      
+      Your response has been sent to the HR team.
+      
+      Kind regards.`,
+        `ACCESS BANK REFERENCE UPDATE`,
+        email
+      );
+      await sendMail(
+        `Dear Team,\nThis is to notify you that the referee "${firstName} ${lastName}" has completed their form as last employer reference for "${candidateName}".\nKind regards.`,
+        `ACCESS BANK REFERENCE UPDATE`,
+        HR_EMAIL
+      );
+      await sendMail(
+        `Dear ${candidateName},\nThis is to notify you that your referee "${firstName} ${lastName}" has completed their form as your last employer referee.\nKind regards.`,
+        `ACCESS BANK REFERENCE UPDATE`,
+        candidateEmail
+      );
     }
 
     return response(res, 200, foundReferee);

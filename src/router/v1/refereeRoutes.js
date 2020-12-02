@@ -6,9 +6,12 @@ import {
   updateWorkRefereeInfo,
   updatPersonalRefereeInfo,
 } from '../../controllers/referee';
+
 import {
+  lastEmployer,
   onboardExpRefereeSchema,
   onboardRefereeSchema,
+  personal,
 } from '../../middlewares/validationSchema/referee';
 import validatePayload from '../../middlewares/validationSchema/validation';
 
@@ -25,9 +28,13 @@ router.post(
   registerExperienceReferees
 );
 
-router.put('/update/:id', updatPersonalRefereeInfo);
+router.put('/update/:id', validatePayload(personal), updatPersonalRefereeInfo);
 
-router.put('/update/experience/:id', updateWorkRefereeInfo);
+router.put(
+  '/update/experience/:id',
+  validatePayload(lastEmployer),
+  updateWorkRefereeInfo
+);
 
 router.get('/get-referee/:candidateId/:id', getReferee);
 

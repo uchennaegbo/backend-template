@@ -17,7 +17,7 @@ export const onboard = async (details) => {
   } catch (error) {
     let msg = error.message;
     if (error.parent.message.includes('duplicate')) {
-      msg = 'Email already exists.';
+      msg = 'Email or Phone number already exists.';
     }
     console.log(msg)
     throw new Error(msg);
